@@ -22,6 +22,7 @@ public class TaskService {
     }
 
     public Task createTask(Task task) {
+        validateTaskTitle(task.getTitle());
         return taskRepository.save(task);
     }
 
@@ -30,6 +31,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
 
         if (taskDetails.getTitle() != null) {
+            validateTaskTitle(taskDetails.getTitle());
             task.setTitle(taskDetails.getTitle());
         }
         if (taskDetails.getDescription() != null) {
@@ -52,5 +54,11 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
         taskRepository.delete(task);
+    }
+
+    private void validateTaskTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Task title cannot be empty");
+        }
     }
 }

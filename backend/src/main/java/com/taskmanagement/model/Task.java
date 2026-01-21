@@ -1,6 +1,7 @@
 package com.taskmanagement.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ public class Task {
     @Column(unique = true, nullable = false, updatable = false)
     private String uniqueId;
 
+    @NotBlank(message = "Title cannot be empty")
     @Column(nullable = false, length = 100)
     private String title;
 

@@ -5,22 +5,44 @@ function TaskForm({ onAddTask }) {
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('TODO');
   const [dueDate, setDueDate] = useState('');
+  const [titleError, setTitleError] = useState('');
+
+  const validateTitle = (value) => {
+    if (!value || !value.trim()) {
+      setTitleError('Title cannot be empty');
+      return false;
+    }
+    setTitleError('');
+    return true;
+  };
+
+  const handleTitleChange = (e) => {
+    const value = e.target.value.substring(0, 100);
+    setTitle(value);
+    if (value.trim()) {
+      setTitleError('');
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title.trim()) {
-      onAddTask({
-        title: title.trim().substring(0, 100),
-        description: description.trim().substring(0, 500),
-        status: status,
-        dueDate: dueDate ? new Date(dueDate).toISOString() : null,
-        completed: false
-      });
-      setTitle('');
-      setDescription('');
-      setStatus('TODO');
-      setDueDate('');
+    
+    if (!validateTitle(title)) {
+      return;
     }
+
+    onAddTask({
+      title: title.trim().substring(0, 100),
+      description: description.trim().substring(0, 500),
+      status: status,
+      dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+      completed: false
+    });
+    setTitle('');
+    setDescription('');
+    setStatus('TODO');
+    setDueDate('');
+    setTitleError('');
   };
 
   return (
@@ -32,10 +54,13 @@ function TaskForm({ onAddTask }) {
           id="title"
           placeholder="Enter task title"
           value={title}
-          onChange={(e) => setTitle(e.target.value.substring(0, 100))}
+          onChange={handleTitleChange}
+          onBlur={() => validateTitle(title)}
           maxLength="100"
           required
+          style={titleError ? { borderColor: '#d32f2f' } : {}}
         />
+        {titleError && <span className="error-message" style={{ color: '#d32f2f', fontSize: '12px', marginTop: '4px' }}>{titleError}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="description">Description ({description.length}/500)</label>
@@ -71,7 +96,7 @@ function TaskForm({ onAddTask }) {
           />
         </div>
       </div>
-      <button type="submit" className="btn btn-primary">Add Task</button>
+      <button type="submit" className="btn btn-primary" disabled={!title.trim()}>Add Task</button>
     </form>
   );
 }

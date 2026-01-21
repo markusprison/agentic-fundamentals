@@ -68,6 +68,15 @@ function TaskItem({ task, onToggle, onDelete, onUpdate }) {
     return new Date(dueDate) < new Date();
   };
 
+  const handleDelete = () => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete the task "${task.title}"?`
+    );
+    if (confirmed) {
+      onDelete(task.id);
+    }
+  };
+
   if (isEditing) {
     return (
       <li className="task-item editing">
@@ -146,7 +155,7 @@ function TaskItem({ task, onToggle, onDelete, onUpdate }) {
           ✎
         </button>
         <button 
-          onClick={() => onDelete(task.id)} 
+          onClick={handleDelete} 
           className="btn btn-delete"
           title="Delete task"
         >
