@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import TaskItem from './TaskItem';
 
 function TaskList({ tasks, onToggleTask, onDeleteTask, onUpdateTask }) {
@@ -117,5 +118,19 @@ function TaskList({ tasks, onToggleTask, onDeleteTask, onUpdateTask }) {
     </div>
   );
 }
+
+TaskList.propTypes = {
+  tasks: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    status: PropTypes.string,
+    completed: PropTypes.bool,
+    dueDate: PropTypes.string
+  })).isRequired,
+  onToggleTask: PropTypes.func.isRequired,
+  onDeleteTask: PropTypes.func.isRequired,
+  onUpdateTask: PropTypes.func.isRequired
+};
 
 export default TaskList;

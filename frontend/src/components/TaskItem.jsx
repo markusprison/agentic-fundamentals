@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 function TaskItem({ task, onToggle, onDelete, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -165,5 +166,20 @@ function TaskItem({ task, onToggle, onDelete, onUpdate }) {
     </li>
   );
 }
+
+TaskItem.propTypes = {
+  task: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    status: PropTypes.string,
+    completed: PropTypes.bool,
+    dueDate: PropTypes.string,
+    updatedAt: PropTypes.string
+  }).isRequired,
+  onToggle: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired
+};
 
 export default TaskItem;
